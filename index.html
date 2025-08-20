@@ -10,32 +10,81 @@
       align-items: center;
       height: 100vh;
       background: #111;
-      color: white;
-      font-family: sans-serif;
+      color: #0f0;
+      font-family: "Courier New", monospace;
       margin: 0;
+    }
+    #menu, #game-over {
+      text-align: center;
+    }
+    button {
+      background: #0f0;
+      color: #000;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #1aff1a;
     }
     canvas {
       background: #000;
-      display: block;
+      display: none;
+      border: 2px solid #0f0;
     }
   </style>
 </head>
 <body>
+  <div id="menu">
+    <h1>🐍 Nokia Snake</h1>
+    <button onclick="startGame()">▶ Play</button>
+  </div>
+
   <canvas id="game" width="400" height="400"></canvas>
+
+  <div id="game-over" style="display: none;">
+    <h1>💀 Game Over!</h1>
+    <button onclick="startGame()">🔄 Retry</button>
+  </div>
+
   <script>
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
+    const menu = document.getElementById("menu");
+    const gameOverScreen = document.getElementById("game-over");
 
     const grid = 20;
-    let count = 0;
-    let snake = [{x: 160, y: 160}];
-    let dx = grid, dy = 0;
-    let food = {x: 320, y: 320};
+    let count, snake, dx, dy, food;
+
+    function resetGame() {
+      count = 0;
+      snake = [{x: 160, y: 160}];
+      dx = grid;
+      dy = 0;
+      food = {x: 320, y: 320};
+    }
+
+    function startGame() {
+      resetGame();
+      menu.style.display = "none";
+      gameOverScreen.style.display = "none";
+      canvas.style.display = "block";
+      requestAnimationFrame(loop);
+    }
+
+    function endGame() {
+      canvas.style.display = "none";
+      gameOverScreen.style.display = "block";
+    }
 
     function loop() {
       requestAnimationFrame(loop);
 
-      if (++count < 5) return;
+      if (++count < 6) return; // speed control
       count = 0;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -52,15 +101,16 @@
         snake.pop();
       }
 
-      // check collision
-      if (head.x < 0 || head.y < 0 || head.x >= canvas.width || head.y >= canvas.height || snake.slice(1).some(s => s.x === head.x && s.y === head.y)) {
-        snake = [{x: 160, y: 160}];
-        dx = grid;
-        dy = 0;
+      // check collisions
+      if (head.x < 0 || head.y < 0 ||
+          head.x >= canvas.width || head.y >= canvas.height ||
+          snake.slice(1).some(s => s.x === head.x && s.y === head.y)) {
+        endGame();
+        return;
       }
 
       // draw snake
-      ctx.fillStyle = "lime";
+      ctx.fillStyle = "#0f0";
       snake.forEach(s => ctx.fillRect(s.x, s.y, grid-2, grid-2));
 
       // draw food
@@ -74,8 +124,6 @@
       if (e.key === "ArrowRight" && dx === 0) { dx = grid; dy = 0; }
       if (e.key === "ArrowDown" && dy === 0) { dx = 0; dy = grid; }
     });
-
-    requestAnimationFrame(loop);
   </script>
 </body>
 </html>
