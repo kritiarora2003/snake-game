@@ -44,7 +44,7 @@
     <button onclick="startGame()">▶ Play</button>
   </div>
 
-  <canvas id="game" width="400" height="400"></canvas>
+  <canvas id="game" width="600" height="600"></canvas>
 
   <div id="game-over" style="display: none;">
     <h1>💀 Game Over!</h1>
@@ -57,15 +57,17 @@
     const menu = document.getElementById("menu");
     const gameOverScreen = document.getElementById("game-over");
 
-    const grid = 20;
-    let count, snake, dx, dy, food;
+    const grid = 30; // bigger grid size
+    let count, snake, dx, dy, food, speed;
 
     function resetGame() {
       count = 0;
-      snake = [{x: 160, y: 160}];
+      snake = [{x: 300, y: 300}];
       dx = grid;
       dy = 0;
-      food = {x: 320, y: 320};
+      food = {x: Math.floor(Math.random() * (canvas.width / grid)) * grid,
+              y: Math.floor(Math.random() * (canvas.height / grid)) * grid};
+      speed = 15; // start slow (higher = slower)
     }
 
     function startGame() {
@@ -84,7 +86,7 @@
     function loop() {
       requestAnimationFrame(loop);
 
-      if (++count < 6) return; // speed control
+      if (++count < speed) return; 
       count = 0;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -95,8 +97,11 @@
 
       // eat food
       if (head.x === food.x && head.y === food.y) {
-        food.x = Math.floor(Math.random() * 20) * grid;
-        food.y = Math.floor(Math.random() * 20) * grid;
+        food.x = Math.floor(Math.random() * (canvas.width / grid)) * grid;
+        food.y = Math.floor(Math.random() * (canvas.height / grid)) * grid;
+
+        // increase speed slightly each time you eat
+        if (speed > 5) speed -= 0.5; 
       } else {
         snake.pop();
       }
