@@ -70,15 +70,20 @@
       speed = 15; // start slow (higher = slower)
     }
 
+    let animationId;
+
     function startGame() {
       resetGame();
       menu.style.display = "none";
       gameOverScreen.style.display = "none";
       canvas.style.display = "block";
-      requestAnimationFrame(loop);
+    
+      cancelAnimationFrame(animationId); // stop old loop if any
+      animationId = requestAnimationFrame(loop);
     }
-
+    
     function endGame() {
+      cancelAnimationFrame(animationId); // stop the loop
       canvas.style.display = "none";
       gameOverScreen.style.display = "block";
     }
