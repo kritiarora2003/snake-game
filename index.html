@@ -67,20 +67,21 @@
       dy = 0;
       food = {x: Math.floor(Math.random() * (canvas.width / grid)) * grid,
               y: Math.floor(Math.random() * (canvas.height / grid)) * grid};
-      speed = 15; // start slow (higher = slower)
+      speed = 10; // start slow (higher = slower)
     }
 
     let animationId;
 
     function startGame() {
-      resetGame();
+      cancelAnimationFrame(animationId); // stop old loop if any
+      resetGame();                       // reset speed, snake, etc.
       menu.style.display = "none";
       gameOverScreen.style.display = "none";
       canvas.style.display = "block";
-    
-      cancelAnimationFrame(animationId); // stop old loop if any
-      animationId = requestAnimationFrame(loop);
+      
+      animationId = requestAnimationFrame(loop); // start fresh loop
     }
+
     
     function endGame() {
       cancelAnimationFrame(animationId); // stop the loop
