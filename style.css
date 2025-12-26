@@ -1,0 +1,88 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #111;
+    color: #0f0;
+    font-family: "Courier New", monospace;
+    margin: 0;
+}
+
+#menu,
+#game-over {
+    text-align: center;
+}
+
+button {
+    background: #0f0;
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background: #1aff1a;
+}
+
+canvas {
+    background: #000;
+    display: none;
+    border: 2px solid #0f0;
+    max-width: 100%;
+    max-height: 80vh;
+}
+
+/* Mobile Controls */
+#controls {
+    display: none;
+    /* Hidden by default on desktop */
+    margin-top: 20px;
+    text-align: center;
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 5px 0;
+}
+
+.control-btn {
+    background: #333;
+    color: #0f0;
+    border: 2px solid #0f0;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.control-btn:active {
+    background: #0f0;
+    color: #000;
+}
+
+@media (max-width: 768px) {
+    #controls {
+        display: block;
+    }
+
+    canvas {
+        width: 90vw;
+        height: 90vw;
+        /* Keep it square */
+    }
+}

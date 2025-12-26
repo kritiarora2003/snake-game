@@ -1,43 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Snake Game 🐍</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #111;
-      color: #0f0;
-      font-family: "Courier New", monospace;
-      margin: 0;
-    }
-    #menu, #game-over {
-      text-align: center;
-    }
-    button {
-      background: #0f0;
-      color: #000;
-      font-size: 18px;
-      font-weight: bold;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    button:hover {
-      background: #1aff1a;
-    }
-    canvas {
-      background: #000;
-      display: none;
-      border: 2px solid #0f0;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div id="menu">
     <h1>🐍 Nokia Snake</h1>
@@ -46,96 +16,23 @@
 
   <canvas id="game" width="600" height="600"></canvas>
 
+  <div id="controls">
+    <div class="control-row">
+      <div class="control-btn" id="up">▲</div>
+    </div>
+    <div class="control-row">
+      <div class="control-btn" id="left">◀</div>
+      <div class="control-btn" id="down">▼</div>
+      <div class="control-btn" id="right">▶</div>
+    </div>
+  </div>
+
   <div id="game-over" style="display: none;">
     <h1>💀 Game Over!</h1>
     <button onclick="startGame()">🔄 Retry</button>
   </div>
 
-  <script>
-    const canvas = document.getElementById("game");
-    const ctx = canvas.getContext("2d");
-    const menu = document.getElementById("menu");
-    const gameOverScreen = document.getElementById("game-over");
-
-    const grid = 30; // bigger grid size
-    let count, snake, dx, dy, food, speed;
-
-    function resetGame() {
-      count = 0;
-      snake = [{x: 300, y: 300}];
-      dx = grid;
-      dy = 0;
-      food = {x: Math.floor(Math.random() * (canvas.width / grid)) * grid,
-              y: Math.floor(Math.random() * (canvas.height / grid)) * grid};
-      speed = 10; // start slow (higher = slower)
-    }
-
-    let animationId;
-
-    function startGame() {
-      cancelAnimationFrame(animationId); // stop old loop if any
-      resetGame();                       // reset speed, snake, etc.
-      menu.style.display = "none";
-      gameOverScreen.style.display = "none";
-      canvas.style.display = "block";
-      
-      animationId = requestAnimationFrame(loop); // start fresh loop
-    }
-
-    
-    function endGame() {
-      cancelAnimationFrame(animationId); // stop the loop
-      canvas.style.display = "none";
-      gameOverScreen.style.display = "block";
-    }
-
-    function loop() {
-      animationId = requestAnimationFrame(loop); // store ID each time
-    
-      if (++count < speed) return; 
-      count = 0;
-    
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-      // move snake
-      let head = {x: snake[0].x + dx, y: snake[0].y + dy};
-      snake.unshift(head);
-    
-      // eat food
-      if (head.x === food.x && head.y === food.y) {
-        food.x = Math.floor(Math.random() * (canvas.width / grid)) * grid;
-        food.y = Math.floor(Math.random() * (canvas.height / grid)) * grid;
-    
-        // increase speed slightly each time you eat
-        if (speed > 5) speed -= 0.5; 
-      } else {
-        snake.pop();
-      }
-    
-      // check collisions
-      if (head.x < 0 || head.y < 0 ||
-          head.x >= canvas.width || head.y >= canvas.height ||
-          snake.slice(1).some(s => s.x === head.x && s.y === head.y)) {
-        endGame();
-        return;
-      }
-    
-      // draw snake
-      ctx.fillStyle = "#0f0";
-      snake.forEach(s => ctx.fillRect(s.x, s.y, grid-2, grid-2));
-    
-      // draw food
-      ctx.fillStyle = "red";
-      ctx.fillRect(food.x, food.y, grid-2, grid-2);
-    }
-
-
-    document.addEventListener("keydown", e => {
-      if (e.key === "ArrowLeft" && dx === 0) { dx = -grid; dy = 0; }
-      if (e.key === "ArrowUp" && dy === 0) { dx = 0; dy = -grid; }
-      if (e.key === "ArrowRight" && dx === 0) { dx = grid; dy = 0; }
-      if (e.key === "ArrowDown" && dy === 0) { dx = 0; dy = grid; }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
+
 </html>
